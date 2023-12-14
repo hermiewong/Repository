@@ -1,23 +1,39 @@
 import numpy as np 
 import matplotlib.pyplot as plt
 from random import *
-
+import scipy.optimize as op
 
 def sprinkle(L,avgN,d=2):
     N=np.random.poisson(avgN)
     position=[]
     if d==2:
         for i in range(N):
-            posneg=choice([1,0])
-            rand=random()
-            if posneg: #t positive
-                t=L/2*(1-np.sqrt(rand))
-                x=(random()-0.5)*(L/2-t)
-            elif not posneg: #t negative
-                t=L/2*(-1+np.sqrt(rand))
-                x=(random()-0.5)*(L/2+t)
-            position.append([t,x])
+            rand1=random()
+            rand2=random()
+            if rand1<0.5:#t negative
+                t=L/2*(-1+np.sqrt(2*rand1))
+                x=(rand2-0.5)*(L+2*t)
+            elif rand1>=0.5:#t positive
+                t=L/2*(1-np.sqrt(2*(1-rand1)))
+                x=(rand2-0.5)*(L-2*t)
+            position.append([x,t])
     position=sorted(position,key=lambda x: x[1])
+    return np.array(position)
+
+def sprinkleADS(L,avgN,R_0,d=2):
+    N=np.random.poisson(avgN)
+    position=[]
+    if d==2:
+        A=2*(np.log((L+2*R_0)/(2*R_0))+np.log((L+2*R_0)/(2*(L+R_0))))
+        position=[]
+        for i in range(N):
+            rand1=random()
+            rand2=random()
+            if rand1>0.5:
+                t=(L-np.sqrt(L**2-4*R_0*(R_0+L)*(np.exp(A*(rand1-0.5))-1)))/2
+                B=(R_0+t)*(R_0+L-t)/(L-2*t)
+                R=1/(1/(R_0+t)-rand2/B)
+                position.append([R,t])
     return np.array(position)
 
 def aleksandrov_interval_sample_ads(points, l, interval_centre):
@@ -67,13 +83,32 @@ def aleksandrov_interval_sample_ads(points, l, interval_centre):
 
 if __name__ == "__main__":
     L=2
-    # x=np.linspace(-L-0.1,L+0.1,100)
-    y=sprinkle(L,5000)
-    print(y)
-    plt.scatter(y[:,0],y[:,1],marker='.')
-    plt.show()
-    l=0.2
-    x=np.linspace(-L/2+l/2,L/2-l/2,100)
-    num=[len(aleksandrov_interval_sample_ads(y,l,[i,0])) for i in x]
-    plt.hist(num,bins=30)
+    R_0=0.1
+    N=10000
+    # flat=sprinkle(L,N)
+    # print(flat)
+    # plt.scatter(flat[:,0],flat[:,1],marker='.')
+    # plt.show()
+    # l=0.2
+    # x=np.linspace(-L/2+l/2,L/2-l/2,100)
+    # num=[len(aleksandrov_interval_sample_ads(flat,l,[0,i])) for i in x]
+    # plt.hist(num,bins=30)
+    # plt.show()
+
+    # ads=sprinkleADS(L,N,R_0,2)
+    # y,x,bin=plt.hist(ads,bins=30)
+    # print(x,y)
+    # x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
+
+    # def func(x,R,L,N):
+    #     y=N*(1/(x+R)+1/(x-R-L))
+    #     return y
+    # fit=op.curve_fit(func,x,y,p0=[0.1,2,1000])
+    # x=np.linspace(0,1,1000)
+    # y=np.array([func(i,*fit[0]) for i in x])
+    # plt.plot(x,y)
+    # plt.show()
+
+    ads=sprinkleADS(L,N,R_0,2)
+    plt.scatter(ads[:,0],ads[:,1],marker='.')
     plt.show()
