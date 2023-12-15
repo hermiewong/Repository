@@ -95,20 +95,20 @@ if __name__ == "__main__":
     # plt.hist(num,bins=30)
     # plt.show()
 
-    # ads=sprinkleADS(L,N,R_0,2)
-    # y,x,bin=plt.hist(ads,bins=30)
-    # print(x,y)
-    # x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
-
-    # def func(x,R,L,N):
-    #     y=N*(1/(x+R)+1/(x-R-L))
-    #     return y
-    # fit=op.curve_fit(func,x,y,p0=[0.1,2,1000])
-    # x=np.linspace(0,1,1000)
-    # y=np.array([func(i,*fit[0]) for i in x])
-    # plt.plot(x,y)
-    # plt.show()
-
     ads=sprinkleADS(L,N,R_0,2)
-    plt.scatter(ads[:,0],ads[:,1],marker='.')
+    y,x,bin=plt.hist(ads[:,1],bins=30)
+    print(x,y)
+    x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
+
+    def func(x,R,L,N):
+        y=N*(1/(x+R)+1/(x-R-L))
+        return y
+    fit=op.curve_fit(func,x,y,p0=[R_0,L,N/30])
+    x=np.linspace(0,1,1000)
+    y=np.array([func(i,*fit[0]) for i in x])
+    plt.plot(x,y)
     plt.show()
+
+    # ads=sprinkleADS(L,N,R_0,2)
+    # plt.scatter(ads[:,0],ads[:,1],marker='.')
+    # plt.show()
