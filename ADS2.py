@@ -122,7 +122,7 @@ if __name__ == "__main__":
     def func(x,R,L,N):
         y=N*(1/(x+R)+1/(x-R-L))
         return y
-    fit=op.curve_fit(func,x,y,p0=[0.1,2,1000])
+    fit=op.curve_fit(func,x,y,p0=[R_0,L,N/30])
     x=np.linspace(0,1,1000)
     y=np.array([func(i,*fit[0]) for i in x])
     plt.plot(x,y)
