@@ -17,6 +17,23 @@ def sprinkle(L,avgN,d=2):
                 t=L/2*(1-np.sqrt(2*(1-rand1)))
                 x=(rand2-0.5)*(L-2*t)
             position.append([x,t])
+
+
+    if d==3:
+        def prob(t):
+            return 6/L-24*t/L**2+24*t**2/L**3
+        def cover(t):
+            return 6/L-12/L**2*t
+        for i in range(N):
+            #sprinkle in t using rejection method:
+            t=False
+            while t==False:
+                ti=L/2*(1-np.sqrt(1-random()))
+                pi=random()*cover(ti)
+                if prob(ti)<pi:
+                    t=ti
+            position.append([0,t])
+
     position=sorted(position,key=lambda x: x[1])
     return np.array(position)
 
@@ -85,6 +102,8 @@ if __name__ == "__main__":
     L=2
     R_0=0.1
     N=10000
+
+    #testing d=2 flat spacetime sprinkle and poisson nature of distribution
     # flat=sprinkle(L,N)
     # print(flat)
     # plt.scatter(flat[:,0],flat[:,1],marker='.')
@@ -95,20 +114,20 @@ if __name__ == "__main__":
     # plt.hist(num,bins=30)
     # plt.show()
 
-    # ads=sprinkleADS(L,N,R_0,2)
-    # y,x,bin=plt.hist(ads,bins=30)
-    # print(x,y)
-    # x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
-
-    # def func(x,R,L,N):
-    #     y=N*(1/(x+R)+1/(x-R-L))
-    #     return y
-    # fit=op.curve_fit(func,x,y,p0=[0.1,2,1000])
-    # x=np.linspace(0,1,1000)
-    # y=np.array([func(i,*fit[0]) for i in x])
-    # plt.plot(x,y)
-    # plt.show()
-
     ads=sprinkleADS(L,N,R_0,2)
-    plt.scatter(ads[:,0],ads[:,1],marker='.')
+    y,x,bin=plt.hist(ads[:,1],bins=30)
+    print(x,y)
+    x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
+
+    def func(x,R,L,N):
+        y=N*(1/(x+R)+1/(x-R-L))
+        return y
+    fit=op.curve_fit(func,x,y,p0=[0.1,2,1000])
+    x=np.linspace(0,1,1000)
+    y=np.array([func(i,*fit[0]) for i in x])
+    plt.plot(x,y)
     plt.show()
+
+    # ads=sprinkleADS(L,N,R_0,2)
+    # plt.scatter(ads[:,0],ads[:,1],marker='.')
+    # plt.show()
