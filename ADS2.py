@@ -30,9 +30,19 @@ def sprinkle(L,avgN,d=2):
             while t==False:
                 ti=L/2*(1-np.sqrt(1-random()))
                 pi=random()*cover(ti)
-                if prob(ti)<pi:
-                    t=ti
-            position.append([0,t])
+                # ti=random()*L/2
+                # pi=random()*6/L
+                if prob(ti)>pi:
+                    posneg=random()
+                    if posneg>0.5:
+                        t=ti
+                    else:
+                        t=-ti
+            r=L/2*np.sqrt(random())
+            theta=random()*2*np.pi
+            x=r*np.cos(theta)
+            y=r*np.sin(theta)
+            position.append([x,t,y])
 
     position=sorted(position,key=lambda x: x[1])
     return np.array(position)
@@ -113,21 +123,26 @@ if __name__ == "__main__":
     # num=[len(aleksandrov_interval_sample_ads(flat,l,[0,i])) for i in x]
     # plt.hist(num,bins=30)
     # plt.show()
+    
+    # #testing ADS distribution for d=2 in t
+    # ads=sprinkleADS(L,N,R_0,2)
+    # y,x,bin=plt.hist(ads[:,1],bins=30)
+    # x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
+    # def func(x,R,L,N):
+    #     y=N*(1/(x+R)+1/(x-R-L))
+    #     return y
+    # fit=op.curve_fit(func,x,y,p0=[R_0,L,N/30])
+    # x=np.linspace(0,1,1000)
+    # y=np.array([func(i,*fit[0]) for i in x])
+    # plt.plot(x,y)
+    # plt.show()
 
-    ads=sprinkleADS(L,N,R_0,2)
-    y,x,bin=plt.hist(ads[:,1],bins=30)
-    print(x,y)
-    x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
-
-    def func(x,R,L,N):
-        y=N*(1/(x+R)+1/(x-R-L))
-        return y
-    fit=op.curve_fit(func,x,y,p0=[R_0,L,N/30])
-    x=np.linspace(0,1,1000)
-    y=np.array([func(i,*fit[0]) for i in x])
-    plt.plot(x,y)
-    plt.show()
-
+    # #show ADS distribution for d=2
     # ads=sprinkleADS(L,N,R_0,2)
     # plt.scatter(ads[:,0],ads[:,1],marker='.')
     # plt.show()
+
+    #testing flat d=3 t distribution
+    flat=sprinkle(L,N,3)
+    plt.hist(flat[:,1],bins=70)
+    plt.show()
