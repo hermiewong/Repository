@@ -63,8 +63,9 @@ def sprinkleADS(L,avgN,R_0,d=2):
                 position.append([R,t])
     
     if d==3:
-
-        
+        A=(L/2+R_0)**2*np.arcsin(L/2/(L/2+R_0))-L/2
+        def 
+                
     position=sorted(position,key=lambda x: x[1])
     return np.array(position)
 
@@ -119,15 +120,15 @@ if __name__ == "__main__":
     N=10000
 
     #testing d=2 flat spacetime sprinkle and poisson nature of distribution
-    flat=sprinkle(L,N)
-    print(flat)
-    plt.scatter(flat[:,0],flat[:,1],marker='.')
-    plt.show()
-    l=0.2
-    x=np.linspace(-L/2+l/2,L/2-l/2,100)
-    num=[len(aleksandrov_interval_sample_ads(flat,l,[0,i])) for i in x]
-    plt.hist(num,bins=30)
-    plt.show()
+    # flat=sprinkle(L,N)
+    # print(flat)
+    # plt.scatter(flat[:,0],flat[:,1],marker='.')
+    # plt.show()
+    # l=0.2
+    # x=np.linspace(-L/2+l/2,L/2-l/2,100)
+    # num=[len(aleksandrov_interval_sample_ads(flat,l,[i,0])) for i in x]
+    # plt.hist(num,bins=30)
+    # plt.show()
     
     # #testing ADS distribution for d=2 in t
     # ads=sprinkleADS(L,N,R_0,2)
@@ -157,11 +158,11 @@ if __name__ == "__main__":
     # plt.show()
 
     #testing poisson for d=3 in flat spacetime
-    flat=sprinkle(L,N,3)
-    plt.scatter(flat[:,0],flat[:,1],marker='.')
-    plt.show()
-    l=0.2
-    x=np.linspace(-L/2+l/2,L/2-l/2,100)
-    num=[len(aleksandrov_interval_sample_ads(flat,l,[0,i,0])) for i in x]
-    plt.hist(num,bins=30)
-    plt.show()
+    # flat=sprinkle(L,N,3)
+    # plt.scatter(flat[:,0],flat[:,1],marker='.')
+    # plt.show()
+    # l=0.2
+    # x=np.linspace(-L/2+l/2,L/2-l/2,100)
+    # num=[len(aleksandrov_interval_sample_ads(flat,l,[i,0,0])) for i in x]
+    # plt.hist(num,bins=20)
+    # plt.show()

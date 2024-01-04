@@ -25,8 +25,8 @@ causet.trajectory(0.1,0.6)
 
 #%%testing plotting trajectory
 plt.show()
-causet=sp.sprinklem(100)
-causet.plottraject(0.1,0.6)
+causet=sp.sprinklem(1000)
+causet.plottraject(0.1,0.8)
 plt.xlim(-0.7,0.7)
 plt.ylim(0,1.4)
 plt.show()
