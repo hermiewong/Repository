@@ -30,8 +30,6 @@ def sprinkle(L,avgN,d=2):
             while t==False:
                 ti=L/2*(1-np.sqrt(1-random()))
                 pi=random()*cover(ti)
-                # ti=random()*L/2
-                # pi=random()*6/L
                 if prob(ti)>pi:
                     posneg=random()
                     if posneg>0.5:
@@ -52,7 +50,6 @@ def sprinkleADS(L,avgN,R_0,d=2):
     position=[]
     if d==2:
         A=2*(np.log((L+2*R_0)/(2*R_0))+np.log((L+2*R_0)/(2*(L+R_0))))
-        position=[]
         for i in range(N):
             rand1=random()
             rand2=random()
@@ -63,9 +60,37 @@ def sprinkleADS(L,avgN,R_0,d=2):
                 position.append([R,t])
     
     if d==3:
-        A=(L/2+R_0)**2*np.arcsin(L/2/(L/2+R_0))-L/2
-        def 
-                
+        def probt(t):
+            return (L/2+R_0)/(np.sqrt(L*R_0+R_0**2+L*t-t**2))-1
+        def covert(t):
+            return probt(0)-probt(0)*2/L*t
+        def probR(R,t):
+            return np.sqrt((t-L/2)**2-(R-(R_0+L/2))**2)/R**2
+
+        for i in range(N):
+            t=False
+            while t==False:
+                ti=L/2*(1-np.sqrt(1-random()))
+                pi=random()*covert(ti)
+                if probt(ti)>pi:
+                    posneg=random()
+                    if posneg>0.5:
+                        t=ti
+                    else:
+                        t=-ti
+            Rmax=(R_0+L/2)/2*(3-np.sqrt(1+8*((ti-L/2)/(R_0+L/2))**2))
+            C=probR(Rmax,ti)
+            R=False
+            while R==False:
+                Ri=R_0+ti+2*random()*(L/2-ti)
+                # print(Ri)
+                pi=random()*C
+                if probR(Ri,ti)>pi:
+                    R=Ri
+            x=(random()-0.5)*2*np.sqrt((L/2)**2-(R-(R_0+L/2))**2)
+            position.append([R,t,x])
+
+
     position=sorted(position,key=lambda x: x[1])
     return np.array(position)
 
@@ -115,7 +140,7 @@ def aleksandrov_interval_sample_ads(points, l, interval_centre):
     return point_subset
 
 if __name__ == "__main__":
-    L=2
+    L=1
     R_0=0.1
     N=10000
 
@@ -166,3 +191,8 @@ if __name__ == "__main__":
     # num=[len(aleksandrov_interval_sample_ads(flat,l,[i,0,0])) for i in x]
     # plt.hist(num,bins=20)
     # plt.show()
+
+    #testing ADS d=3 t distribution
+    ADS=sprinkleADS(L,N,R_0,d=3)
+    plt.scatter(ADS[:,0],ADS[:,1],marker='.')
+    plt.show()
