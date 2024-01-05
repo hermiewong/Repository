@@ -188,12 +188,12 @@ if __name__ == "__main__":
     # plt.show()
 
     # # testing poisson for d=3 in flat spacetime
-    # flat=sprinkle(L,N,3)
-    # l=0.2
-    # x=np.linspace(-L/2+l/2,L/2-l/2,100)
-    # num=[len(aleksandrov_interval_sample_ads(flat,l,[i,0,0])) for i in x]
-    # plt.hist(num,bins=20)
-    # plt.show()
+    flat=sprinkle(L,N,3)
+    l=0.2
+    x=np.linspace(-L/2+l/2,L/2-l/2,100)
+    num=[len(aleksandrov_interval_sample_ads(flat,l,[i,0,0])) for i in x]
+    plt.plot(x,num)
+    plt.show()
 
     # #showing ADS d=3 distribution
     # ads=sprinkleADS(L,N,R_0,d=3)
@@ -203,7 +203,7 @@ if __name__ == "__main__":
     # #testing ADS d=3 intervals in t and x
     ads=sprinkleADS(L,N,R_0,d=3)
     l=0.2
-    x=np.linspace(R_0-L/2+l/2,R_0+L/2-l/2,100)
-    num=[len(aleksandrov_interval_sample_ads(ads,l,[R_0+L/2,0,i])) for i in x]
-    plt.hist(num,bins=20)
+    x=np.linspace(R_0+l/2,R_0+L-l/2,100)
+    num=[len(aleksandrov_interval_sample_ads(ads,l,[i,0,0])) for i in x]
+    plt.plot(x,num)
     plt.show()
