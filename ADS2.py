@@ -87,7 +87,7 @@ def sprinkleADS(L,avgN,R_0,d=2):
                 pi=random()*C
                 if probR(Ri,ti)>pi:
                     R=Ri
-            x=(random()-0.5)*2*np.sqrt((L/2)**2-(R-(R_0+L/2))**2)
+            x=(random()-0.5)*2*np.sqrt((ti-L/2)**2-(R-(R_0+L/2))**2)
             position.append([R,t,x])
 
 
@@ -182,17 +182,28 @@ if __name__ == "__main__":
     # plt.hist(flat[:,0],bins=30)
     # plt.show()
 
-    #testing poisson for d=3 in flat spacetime
+    # #showing flat d=3 distribution
     # flat=sprinkle(L,N,3)
-    # plt.scatter(flat[:,0],flat[:,1],marker='.')
+    # plt.scatter(flat[:,0],flat[:,2],marker='.')
     # plt.show()
+
+    # # testing poisson for d=3 in flat spacetime
+    # flat=sprinkle(L,N,3)
     # l=0.2
     # x=np.linspace(-L/2+l/2,L/2-l/2,100)
     # num=[len(aleksandrov_interval_sample_ads(flat,l,[i,0,0])) for i in x]
     # plt.hist(num,bins=20)
     # plt.show()
 
-    #testing ADS d=3 t distribution
-    ADS=sprinkleADS(L,N,R_0,d=3)
-    plt.scatter(ADS[:,0],ADS[:,1],marker='.')
+    # #showing ADS d=3 distribution
+    # ads=sprinkleADS(L,N,R_0,d=3)
+    # plt.scatter(ads[:,0],ads[:,1],marker='.')
+    # plt.show()
+
+    # #testing ADS d=3 intervals in t and x
+    ads=sprinkleADS(L,N,R_0,d=3)
+    l=0.2
+    x=np.linspace(R_0-L/2+l/2,R_0+L/2-l/2,100)
+    num=[len(aleksandrov_interval_sample_ads(ads,l,[R_0+L/2,0,i])) for i in x]
+    plt.hist(num,bins=20)
     plt.show()
