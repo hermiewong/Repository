@@ -140,7 +140,7 @@ def aleksandrov_interval_sample_ads(points, l, interval_centre):
     return point_subset
 
 if __name__ == "__main__":
-    L=1
+    L=4
     R_0=0.1
     N=10000
 
@@ -155,23 +155,23 @@ if __name__ == "__main__":
     # plt.hist(num,bins=30)
     # plt.show()
     
-    # #testing ADS distribution for d=2 in t
-    # ads=sprinkleADS(L,N,R_0,2)
-    # y,x,bin=plt.hist(ads[:,1],bins=30)
-    # x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
-    # def func(x,R,L,N):
-    #     y=N*(1/(x+R)+1/(x-R-L))
-    #     return y
-    # fit=op.curve_fit(func,x,y,p0=[R_0,L,N/30])
-    # x=np.linspace(0,1,1000)
-    # y=np.array([func(i,*fit[0]) for i in x])
-    # plt.plot(x,y)
-    # plt.show()
+    # #testing ADS distribution for d=2 in t, checks t transformation rule correctly generates desired t distribution
+    ads=sprinkleADS(L,N,R_0,2)
+    y,x,bin=plt.hist(ads[:,1],bins=30)
+    x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
+    def func(x,R,L,N):
+        y=N*(1/(x+R)+1/(x-R-L))
+        return y
+    fit=op.curve_fit(func,x,y,p0=[R_0,L,N/30])
+    x=np.linspace(0,L/2,1000)
+    y=np.array([func(i,*fit[0]) for i in x])
+    plt.plot(x,y)
+    plt.show()
 
     # #show ADS distribution for d=2
-    # ads=sprinkleADS(L,N,R_0,2)
-    # plt.scatter(ads[:,0],ads[:,1],marker='.')
-    # plt.show()
+    ads=sprinkleADS(L,N,R_0,2)
+    plt.scatter(ads[:,0],ads[:,1],marker='.')
+    plt.show()
 
     #testing flat d=3 t distribution
     # flat=sprinkle(L,N,3)
@@ -188,12 +188,12 @@ if __name__ == "__main__":
     # plt.show()
 
     # # testing poisson for d=3 in flat spacetime
-    flat=sprinkle(L,N,3)
-    l=0.2
-    x=np.linspace(-L/2+l/2,L/2-l/2,100)
-    num=[len(aleksandrov_interval_sample_ads(flat,l,[i,0,0])) for i in x]
-    plt.plot(x,num)
-    plt.show()
+    # flat=sprinkle(L,N,3)
+    # l=0.2
+    # x=np.linspace(-L/2+l/2,L/2-l/2,100)
+    # num=[len(aleksandrov_interval_sample_ads(flat,l,[i,0,0])) for i in x]
+    # plt.plot(x,num)
+    # plt.show()
 
     # #showing ADS d=3 distribution
     # ads=sprinkleADS(L,N,R_0,d=3)
@@ -201,9 +201,9 @@ if __name__ == "__main__":
     # plt.show()
 
     # #testing ADS d=3 intervals in t and x
-    ads=sprinkleADS(L,N,R_0,d=3)
-    l=0.2
-    x=np.linspace(R_0+l/2,R_0+L-l/2,100)
-    num=[len(aleksandrov_interval_sample_ads(ads,l,[i,0,0])) for i in x]
-    plt.plot(x,num)
-    plt.show()
+    # ads=sprinkleADS(L,N,R_0,d=3)
+    # l=0.2
+    # x=np.linspace(R_0+l/2,R_0+L-l/2,100)
+    # num=[len(aleksandrov_interval_sample_ads(ads,l,[i,0,0])) for i in x]
+    # plt.plot(x,num)
+    # plt.show()
