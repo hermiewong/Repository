@@ -49,15 +49,19 @@ def sprinkleADS(L,avgN,R_0,d=2):
     N=np.random.poisson(avgN)
     position=[]
     if d==2:
-        A=2*(np.log((L+2*R_0)/(2*R_0))+np.log((L+2*R_0)/(2*(L+R_0))))
+        A=np.log((L+2*R_0)/(2*R_0))+np.log((L+2*R_0)/(2*(L+R_0)))
         for i in range(N):
             rand1=random()
             rand2=random()
-            if rand1>0.5:
-                t=(L-np.sqrt(L**2-4*R_0*(R_0+L)*(np.exp(A*(rand1-0.5))-1)))/2
-                B=(R_0+t)*(R_0+L-t)/(L-2*t)
-                R=1/(1/(R_0+t)-rand2/B)
-                position.append([R,t])
+            posneg=random()
+            ti=(L-np.sqrt(L**2-4*R_0*(R_0+L)*(np.exp(A*rand1)-1)))/2
+            if posneg>0.5:
+                t=-ti
+            else:
+                t=ti
+            B=(R_0+ti)*(R_0+L-ti)/(L-2*ti)
+            R=1/(1/(R_0+ti)-rand2/B)
+            position.append([R,t])
     
     if d==3:
         def probt(t):
@@ -156,22 +160,22 @@ if __name__ == "__main__":
     # plt.show()
     
     # #testing ADS distribution for d=2 in t, checks t transformation rule correctly generates desired t distribution
-    ads=sprinkleADS(L,N,R_0,2)
-    y,x,bin=plt.hist(ads[:,1],bins=30)
-    x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
-    def func(x,R,L,N):
-        y=N*(1/(x+R)+1/(x-R-L))
-        return y
-    fit=op.curve_fit(func,x,y,p0=[R_0,L,N/30])
-    x=np.linspace(0,L/2,1000)
-    y=np.array([func(i,*fit[0]) for i in x])
-    plt.plot(x,y)
-    plt.show()
+    # ads=sprinkleADS(L,N,R_0,2)
+    # y,x,bin=plt.hist(ads[:,1],bins=30)
+    # x=np.array([(x[i+1]+x[i])/2 for i in range(len(x)-1)])
+    # def func(x,R,L,N):
+    #     y=N*(1/(abs(x)+R)+1/(abs(x)-R-L))
+    #     return y
+    # fit=op.curve_fit(func,x,y,p0=[R_0,L,N/30])
+    # x=np.linspace(-L/2,L/2,1000)
+    # y=np.array([func(i,*fit[0]) for i in x])
+    # plt.plot(x,y)
+    # plt.show()
 
     # #show ADS distribution for d=2
-    ads=sprinkleADS(L,N,R_0,2)
-    plt.scatter(ads[:,0],ads[:,1],marker='.')
-    plt.show()
+    # ads=sprinkleADS(L,N,R_0,2)
+    # plt.scatter(ads[:,0],ads[:,1],marker='.')
+    # plt.show()
 
     #testing flat d=3 t distribution
     # flat=sprinkle(L,N,3)
