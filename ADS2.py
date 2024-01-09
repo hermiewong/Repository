@@ -65,11 +65,11 @@ def sprinkleADS(L,avgN,R_0,d=2):
     
     if d==3:
         def probt(t):
-            return (L/2+R_0)/(np.sqrt(L*R_0+R_0**2+L*t-t**2))-1
+            return (t-L/2)**2/(R_0**2+R_0*L-t**2+t*L)
         def covert(t):
-            return probt(0)-probt(0)*2/L*t
+            return probt(0)*(1-2/L*t)
         def probR(R,t):
-            return np.sqrt((t-L/2)**2-(R-(R_0+L/2))**2)/R**2
+            return np.sqrt((t-L/2)**2-(R-(R_0+L/2))**2)/R**3
 
         for i in range(N):
             t=False
@@ -82,12 +82,11 @@ def sprinkleADS(L,avgN,R_0,d=2):
                         t=ti
                     else:
                         t=-ti
-            Rmax=(R_0+L/2)/2*(3-np.sqrt(1+8*((ti-L/2)/(R_0+L/2))**2))
+            Rmax=5*(R_0+L/2)/4*(1-np.sqrt(1+24*((ti-L/2)/(R_0+L/2))**2)/5)
             C=probR(Rmax,ti)
             R=False
             while R==False:
                 Ri=R_0+ti+2*random()*(L/2-ti)
-                # print(Ri)
                 pi=random()*C
                 if probR(Ri,ti)>pi:
                     R=Ri
@@ -200,14 +199,18 @@ if __name__ == "__main__":
     # plt.show()
 
     # #showing ADS d=3 distribution
-    # ads=sprinkleADS(L,N,R_0,d=3)
-    # plt.scatter(ads[:,0],ads[:,1],marker='.')
-    # plt.show()
+    ads=sprinkleADS(L,N,R_0,d=3)
+    plt.scatter(ads[:,0],ads[:,1],marker='.')
+    plt.show()
 
     # #testing ADS d=3 intervals in t and x
-    # ads=sprinkleADS(L,N,R_0,d=3)
-    # l=0.2
-    # x=np.linspace(R_0+l/2,R_0+L-l/2,100)
-    # num=[len(aleksandrov_interval_sample_ads(ads,l,[i,0,0])) for i in x]
-    # plt.plot(x,num)
-    # plt.show()
+    ads=sprinkleADS(L,N,R_0,d=3)
+    l=0.2
+    x=np.linspace(R_0+l/2,R_0+L-l/2,100)
+    num=[len(aleksandrov_interval_sample_ads(ads,l,[i,0,0])) for i in x]
+    def func(x,A):
+        return A/x**3
+    fit=op.curve_fit(func,x,num,p0=[N])
+    plt.plot(x,num)
+    plt.plot(x,func(x,fit[0]))
+    plt.show()
