@@ -5,9 +5,9 @@ import scipy.optimize as op
 
 def sprinkle(L,avgN,d=2):
     N=np.random.poisson(avgN)
-    position=[]
+    position=[[0,L/2],[0,-L/2]]
     if d==2:
-        for i in range(N):
+        for i in range(N-2):
             rand1=random()
             rand2=random()
             if rand1<0.5:#t negative
