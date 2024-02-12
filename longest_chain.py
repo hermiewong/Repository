@@ -63,8 +63,10 @@ def longest_chain(link):
 
 if __name__=='__main__':
     import ADS2 as ads
-    N=50
-    flat=ads.sprinkle(2,N,2)
+    N=80
+    L=10
+    d=2
+    flat=ads.sprinkle(L,N,d)
 
     relation={}
     for i,base in enumerate(flat):
@@ -87,5 +89,13 @@ if __name__=='__main__':
     lonk=link(relation)
     print(lonk)
     long=longest_chain(lonk)
-    print("longest chains:",long)
-    print([len(i) for i in long])
+    print("longest chains length:",len(long[0]))
+    volume=L**2/2
+    print('volume=',volume)
+    density=len(flat)/volume
+    ldiscrete=density**(-1/d)
+    print('density=',density)
+    print('discreteness length=',ldiscrete)
+    print('tau/ldiscrete=',L/ldiscrete)
+    print('longest*ldiscrete/tau=',len(long[0])*ldiscrete/L)
+    print('mdcd**1/d=',2*(1/2)**(1/d))
