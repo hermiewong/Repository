@@ -33,29 +33,81 @@ def link(relation): # assumes there is a point at top and bottom of interval, an
         link[j]=ith_link
     return link
 
-def longest_chain(link):
+def longest_chain(link,test=0,cycle=20):
+    """
+    link: dictionary of links
+    """
     maximal=[]
     for i in link[0]:
         maximal.append([0,i])
     flow=1
-    while flow>0:
-        flow=0
-        maximal_copy=[]
-        for i in maximal:
-            if i=='remove':
+    if test==False:
+        while flow>0:
+            flow=0
+            maximal_copy=[]
+            for i in maximal:
+                # if i=='remove':
+                #     continue
+                if link.get(i[-1])==None:
+                    continue
+                for j in link[i[-1]]:
+                    # for k in maximal:#check for longer route by removing shorter routes to the same point
+                    #     if j in k and not j==k[-1]:
+                    #         k='remove'
+                    element=i.copy()
+                    element.append(j)
+                    maximal_copy.append(element)
+                    flow+=1
+            if flow!=0:
+                maximal=maximal_copy
+    else:
+        count=0
+        while flow>0:
+            count+=1
+            flow=0
+            maximal_copy=[]
+            if count==cycle:
+                count+=1
+                for i in maximal:
+                    if link.get(i[-1])==None:
+                        continue
+                    for j in link[i[-1]]:
+                        for k in maximal:#check for longer route by removing shorter routes to the same point
+                            if j in k:
+                                k='remove'
+                        element=i.copy()
+                        element.append(j)
+                        maximal_copy.append(element)
+                        flow+=1
+                if flow!=0:
+                    maximal=maximal_copy
                 continue
-            if link.get(i[-1])==None:
-                continue
-            for j in link[i[-1]]:
-                for k in maximal:#check for longer route by removing shorter routes to the same point
-                    if j in k and not j==k[-1]:
-                        k='remove'
-                element=i.copy()
-                element.append(j)
-                maximal_copy.append(element)
-                flow+=1
-        if flow!=0:
-            maximal=maximal_copy
+            
+            if count==cycle+1:
+                count=0
+                for i in maximal:
+                    if i=='remove':
+                        continue
+                    if link.get(i[-1])==None:
+                        continue
+                    for j in link[i[-1]]:
+                        element=i.copy()
+                        element.append(j)
+                        maximal_copy.append(element)
+                        flow+=1
+                if flow!=0:
+                    maximal=maximal_copy
+            else:
+                for i in maximal:
+                    if link.get(i[-1])==None:
+                        continue
+                    for j in link[i[-1]]:
+                        element=i.copy()
+                        element.append(j)
+                        maximal_copy.append(element)
+                        flow+=1
+                if flow!=0:
+                    maximal=maximal_copy
     return maximal
             
 
@@ -63,11 +115,11 @@ def longest_chain(link):
 
 if __name__=='__main__':
     import ADS2 as ads
-    N=80
-    L=10
+    N=150
+    L=100
     d=2
+    cycle=100
     flat=ads.sprinkle(L,N,d)
-
     relation={}
     for i,base in enumerate(flat):
         ith=[]
@@ -86,16 +138,26 @@ if __name__=='__main__':
 
         relation[i]=ith
     # print(relation)
+    import time
+    t0=time.time()
     lonk=link(relation)
-    print(lonk)
-    long=longest_chain(lonk)
+    t1=time.time()
+    # print(lonk)
+    long=longest_chain(lonk,0)
+    t2=time.time()
+    long=longest_chain(lonk,1,cycle)
+    t3=time.time()
+    print('Link time=',t1-t0)
+    print('Original=',t2-t1)
+    print('Test=',t3-t2)
     print("longest chains length:",len(long[0]))
     volume=L**2/2
-    print('volume=',volume)
+    print('Number of points sprinkled:',len(flat))
+    # print('volume=',volume)
     density=len(flat)/volume
     ldiscrete=density**(-1/d)
     print('density=',density)
     print('discreteness length=',ldiscrete)
-    print('tau/ldiscrete=',L/ldiscrete)
+    # print('tau/ldiscrete=',L/ldiscrete)
     print('longest*ldiscrete/tau=',len(long[0])*ldiscrete/L)
     print('mdcd**1/d=',2*(1/2)**(1/d))
