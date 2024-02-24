@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-N=np.random.poisson(100)
+N=np.random.poisson(10)
 uv=np.array([[0,0]])
 for i in range(N):
     uv=np.append(uv,[[np.random.rand(),np.random.rand()]],axis=0)
@@ -54,13 +54,14 @@ plt.scatter(uv[:,0],uv[:,1])
 for i in link:
     plt.plot([uv[i[0],0],uv[i[1],0]],[uv[i[0],1],uv[i[1],1]])
 
+
 plt.figure(2)
+plt.xlabel('x')
+plt.ylabel('t')
+plt.grid()
 plt.scatter(xt[:,0],xt[:,1])
+for i in range(len(xt)):
+    plt.text(xt[i,0],xt[i,1],i)
 for i in link:
     plt.plot([xt[i[0],0],xt[i[1],0]],[xt[i[0],1],xt[i[1],1]])
 plt.show()
-#%%
-dct={0:1,2:2,4:3,6:4}
-for i in dct:
-    print(i)
-# %%
