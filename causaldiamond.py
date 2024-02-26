@@ -1,14 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-N=np.random.poisson(10)
-uv=np.array([[0,0]])
+N=np.random.poisson(100)
+uv=np.array([[0,0],[1,1]])
 for i in range(N):
     uv=np.append(uv,[[np.random.rand(),np.random.rand()]],axis=0)
-uv=uv[1:]
+# uv=uv[1:]
 precede=np.array([[0,0]])
 #index 0 precedes index 1
-count=np.zeros(N)#number of precession for each element
+count=np.zeros(len(uv))#number of precession for each element
 for i in range(len(uv)):
     number=0
     for j in range(len(uv)):
@@ -49,19 +49,31 @@ for i in uv:
     xt=np.append(xt,[[x,t]],axis=0)
 xt=xt[1:]
 
-plt.figure(1)
-plt.scatter(uv[:,0],uv[:,1])
-for i in link:
-    plt.plot([uv[i[0],0],uv[i[1],0]],[uv[i[0],1],uv[i[1],1]])
+params= {
+   'axes.labelsize': 18,
+   'font.size': 18,
+   'legend.fontsize': 18,
+   'xtick.labelsize': 16,
+   'ytick.labelsize': 16,
+   'figure.figsize': [10, 6] 
+   }
+plt.rcParams.update(params)
 
+
+# plt.figure(1)
+# plt.scatter(uv[:,0],uv[:,1])
+# for i in link:
+#     plt.plot([uv[i[0],0],uv[i[1],0]],[uv[i[0],1],uv[i[1],1]])
 
 plt.figure(2)
 plt.xlabel('x')
 plt.ylabel('t')
+
 plt.grid()
-plt.scatter(xt[:,0],xt[:,1])
-for i in range(len(xt)):
-    plt.text(xt[i,0],xt[i,1],i)
+plt.scatter(xt[:,0],xt[:,1],color='k')
+# for i in range(len(xt)):
+#     plt.text(xt[i,0],xt[i,1],i)
 for i in link:
-    plt.plot([xt[i[0],0],xt[i[1],0]],[xt[i[0],1],xt[i[1],1]])
+    plt.plot([xt[i[0],0],xt[i[1],0]],[xt[i[0],1],xt[i[1],1]],color='k')
+plt.plot([-np.sqrt(2)/2,0,np.sqrt(2)/2,0,-np.sqrt(2)/2],[np.sqrt(2)/2,0,np.sqrt(2)/2,np.sqrt(2),np.sqrt(2)/2],linewidth=3)
 plt.show()
