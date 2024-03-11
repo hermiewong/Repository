@@ -17,7 +17,7 @@ def filter_interval(position,l,interval_centre):
             r_max_squared = r_max**2
             r_squared = diff[0]**2 + sum(diff[2:]**2)
             if r_squared <= r_max_squared:
-                position_subset.add(i)
+                position_subset.append(i)
         elif ti> t_c:
             break
     position_subset=np.array(position_subset)
