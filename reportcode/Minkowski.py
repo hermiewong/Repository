@@ -11,7 +11,7 @@ def sprinkle(N,L,d,endpoint=False):
             bottom.append(0)
         position.append(bottom)
         position.append(top)
-    for i in range(N):
+    for i in range(Npoint):
         x=np.random.rand(d)
         x[:]*=L
         x[:]-=L/2
